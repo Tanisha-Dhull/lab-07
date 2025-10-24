@@ -2,6 +2,9 @@ package com.example.androiduitesting;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.widget.AdapterView;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -38,8 +41,25 @@ public class MainActivity extends AppCompatActivity {
 
         cityAdapter = new ArrayAdapter<>(this, R.layout.content, dataList);
 
-
         cityList.setAdapter(cityAdapter);
+
+        // When the user taps a city in the list, open ShowActivity and display that city's name
+        cityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View rowView, int position, long id) {
+                // Get the city name that was tapped
+                String chosenCity = (String) parent.getItemAtPosition(position);
+
+                // Build an Intent to launch ShowActivity
+                Intent intent = new Intent(MainActivity.this, ShowActivity.class);
+
+                // Attach the city name so ShowActivity can read it
+                intent.putExtra(ShowActivity.EXTRA_CITY_NAME, chosenCity);
+
+                // Go to ShowActivity
+                startActivity(intent);
+            }
+        });
 
         final Button addButton = findViewById(R.id.button_add);
         addButton.setOnClickListener(new View.OnClickListener() {
